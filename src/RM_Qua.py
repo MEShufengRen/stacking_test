@@ -94,7 +94,6 @@ def make_rand_unit_vector(dims):
 
 
 def GetTransform():
-    #rate = rospy.Rate(20)
     tfL = tf.TransformListener()
     while not rospy.is_shutdown():
         try:
@@ -114,7 +113,7 @@ def callback(data):
     global pub
     uL = data.x
     vL = data.y
-    Z = -0.1
+    Z = -0.17
     ET = GetTransform()
     lenData = len(uL)
     posL = Location()
@@ -124,10 +123,11 @@ def callback(data):
         u = uL[i]
         v = vL[i]
         # IntrinsicMatrix = np.array([[406.6258, 0, 307.8967, 0], [0, 406.8015, 234.9393, 0], [0, 0, 1, 0]])
-        IntrinsicMatrix = np.array([[398.124176, 0, 303.086915, 0], [0, 403.328003, 243.216396, 0], [0, 0, 1, 0]])
+        # IntrinsicMatrix = np.array([[398.124176, 0, 303.086915, 0], [0, 403.328003, 243.216396, 0], [0, 0, 1, 0]])
+        IntrinsicMatrix = np.matrix([[406.267, 0.0, 311.640, 0.0], [0.0, 406.267, 235.140, 0], [0, 0, 1, 0]])
         TotalMatrix = np.dot(IntrinsicMatrix, ET)
-        A = np.concatenate((-TotalMatrix[:, 0:2], np.array([[u, v, 1]]).T), 1)
-        B = np.array(TotalMatrix[:, 2]) * Z + np.array(TotalMatrix[:, 3])
+        A = np.concatenate((-TotalMatrix[:, 0:2], np.matrix([[u, v, 1]]).T), 1)
+        B = np.matrix(TotalMatrix[:, 2]) * Z + np.matrix(TotalMatrix[:, 3])
         result = np.dot(A.I, B)
         list_x.append(result[0])
         list_y.append(result[1])
