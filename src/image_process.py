@@ -12,6 +12,7 @@ from sensor_msgs.msg import CameraInfo
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Vector3 
 from stacking_test.msg import Location
+from CubePositionClass import CubePositionClass
 
 """
 DEFINES
@@ -64,7 +65,8 @@ def image_raw_callback(image):
     return
 
 def coords_for_object(cv_image):
-    location_publisher = rospy.Publisher('/location', Location, queue_size=10)
+    global cubeposclass
+    location_publisher = rospy.Publisher('/location', Location, queue_size=1)
     loc = Location()
     xlist = []
     ylist = []
@@ -123,9 +125,20 @@ def coords_for_object(cv_image):
     # rospy.loginfo("===========")
     # loc.y.append(max_x/640.0*1.2-0.6)
     # loc.x.append(0.8-max_y/400.0*0.6)
+
     loc.x.append(max_x)
     loc.y.append(max_y)
     loc.theta.append(max_angle)
+    print('uv')
+    print(loc)
+    uVectorList = cubeposclass.compute_uVector(loc)
+    print('unit Vector')
+    print(uVectorList)
+    cVectorList = cubeposclass.compute_cVector(uVectorList)
+    world_pos = cubeposclass.compute_wPose(cVectorList)
+    loc.x[0] = world_pos[0].pose.position.x-0.245
+    loc.y[0] = world_pos[0].pose.position.y-0.286
+    print(loc)
     location_publisher.publish(loc)
 
     # show images
@@ -170,6 +183,8 @@ def listener():
     # rospy.Subscriber('/usb_cam/camera_info', CameraInfo, camera_info_callback)
     # rospy.Subscriber('/usb_cam/image_raw', Image, image_raw_callback)
     # rospy.Subscriber('/usb_cam/image_rect_color', Image, image_raw_callback)
+    global  cubeposclass
+    cubeposclass = CubePositionClass()
     rospy.Subscriber('/cameras/right_hand_camera/camera_info', CameraInfo, camera_info_callback)
     rospy.Subscriber('/cameras/right_hand_camera/image', Image, image_raw_callback)
 
