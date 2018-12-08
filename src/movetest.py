@@ -30,19 +30,20 @@ def main():
     _myPlanner_right.group.clear_pose_targets()
     _myPlanner_right.group.set_pose_reference_frame('base')
     _myPlanner_right.group.allow_replanning(True)
-    _myPlanner_right.group.set_goal_position_tolerance(0.01)
-    _myPlanner_right.group.set_goal_orientation_tolerance(0.01)
+    _myPlanner_right.group.set_goal_position_tolerance(0.005)
+    _myPlanner_right.group.set_goal_orientation_tolerance(0.005)
     #
     # _myPlanner_left.group.set_joint_value_target([0.094, -0.873, -0.907, 1.456, 0.564, 1.303, 3.034])
     # _myPlanner_left.group.go()
     # _myPlanner_right.group.set_joint_value_target([0.094, -0.873, -0.907, 1.456, 0.564, 1.303, 3.034])
     # _myPlanner_right.group.go()
     # rospy.sleep(3)
-    _myPlanner_left.move_robotArm(0.756, -0.038, -0.17)
+    _myPlanner_left.move_robotArm(0.5137, 0.0285, -0.15)
+    print(_myPlanner_right.group.get_current_pose().pose.position.z)
 
     # a=_myPlanner_left.group.get_current_joint_values()
     # print(a)
-    box_pose=[[0.4,0.2,-0.15],[0.4,-0.2,-0.15]]
+    box_pose = [[0.4, 0.2, -0.15], [0.4, -0.2, -0.15]]
 
     # for i in box_pose:
     #     left_pose=_myPlanner_left.group.get_current_pose().pose
