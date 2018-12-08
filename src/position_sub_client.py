@@ -5,6 +5,7 @@ from stacking_test.srv import IKService
 
 
 def callback(position):
+    print(position)
     position.x=list(position.x)
     #print(position.x)
     position.y = list(position.y)
@@ -28,7 +29,7 @@ def callback(position):
 def main():
     rospy.init_node('position_pub_client', anonymous=True)
     rate = rospy.Rate(100)
-    rospy.Subscriber('/world_location', Location, callback)
+    rospy.Subscriber('/location', Location, callback)
     rate.sleep()
     rospy.spin()
 
