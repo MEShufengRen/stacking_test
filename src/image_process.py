@@ -147,23 +147,29 @@ def coords_for_object(cv_image):
     # loc.y.append(max_x/640.0*1.2-0.6)
     # loc.x.append(0.8-max_y/400.0*0.6)
 
-    if (numpy.abs(prev_x - max_x) > 15) & (numpy.abs(prev_y - max_y) > 15) & (flag_arm == 1):
+    # if (numpy.abs(prev_x - max_x) > 15) & (numpy.abs(prev_y - max_y) > 15) & (flag_arm == 1):
+    print("flag: ",flag_arm)
+    if (flag_arm == 1):
         prev_x = max_x
         prev_y = max_y
         # loc.y.append(max_x / 640.0 * 1.2 - 0.6)
         # loc.x.append(0.8 - max_y / 400.0 * 0.6)
-        loc.y.append(max_x )
-        loc.x.append(max_y )
+        loc.x.append(max_x )
+        loc.y.append(max_y )
+        loc.theta.append(max_angle)
+        if(max_x> 0 or max_y>0):
+            location_publisher.publish(loc)
+            flag_arm = 0
+
+    if flag_arm == 2:
+        loc.x.append(prev_x )
+        loc.y.append(prev_y )
         loc.theta.append(max_angle)
         location_publisher.publish(loc)
         flag_arm = 0
 
-    if flag_arm == 2:
-        loc.y.append(prev_x )
-        loc.x.append(prev_y )
-        loc.theta.append(max_angle)
-        location_publisher.publish(loc)
-        flag_arm = 0
+    print("x: ", max_x)
+    print("y: ", max_y)
 
     # show images
     cv2.imshow("cv_images", numpy.hstack([cv_image, output]))
