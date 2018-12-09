@@ -2,10 +2,15 @@
 from stacking_test.msg import Location
 import rospy
 from stacking_test.srv import IKService
+from std_msgs.msg import String
 
 
 def callback(position):
-    print(position)
+    global  finish_pub
+    FINISH = String()
+    FINISH.data = '1'
+    flag = 'F'
+    # print(position)
     position.x=list(position.x)
     #print(position.x)
     position.y = list(position.y)
@@ -16,20 +21,20 @@ def callback(position):
         print(position.x[i])
         print(position.y[i])
         flag = move_arm(position.x[i], position.y[i])
-        # if flag == 'T':
-        #     position.x.remove(position.x[i])
-        #     position.y.remove(position.y[i])
-        # else:
-        #     position.x.remove(position.x[i])
-        #     position.y.remove(position.y[i])
-        #     position.x.insert(-1, position.x[i])
-        #     position.y.insert(-1, position.y[i])
+
+    if flag=='T':
+        FINISH.data = '1'
+
+    finish_pub.publish(FINISH)
+
 
 
 def main():
+    global  finish_pub
     rospy.init_node('position_pub_client', anonymous=True)
     rate = rospy.Rate(100)
-    rospy.Subscriber('/location', Location, callback)
+    rospy.Subscriber('/world_location', Location, callback)
+    finish_pub = rospy.Publisher('/pick_finish', String, queue_size=1)
     rate.sleep()
     rospy.spin()
 

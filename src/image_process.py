@@ -13,6 +13,8 @@ from sensor_msgs.msg import Image
 from geometry_msgs.msg import Vector3 
 from stacking_test.msg import Location
 from CubePositionClass import CubePositionClass
+from std_msgs.msg import String
+
 
 """
 DEFINES
@@ -32,6 +34,7 @@ prev_y = 0
 
 click_count = 0
 marker = 0;
+flag_arm = 1
 
 def onMouse(event,x,y,flags,param):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -55,6 +58,23 @@ def onMouse(event,x,y,flags,param):
 def camera_info_callback(camera_info):
     pass
 
+def arm_finish_callback(finish):
+    """
+    FINISH = 0: Arm movement interrupted, publish previous location again -- FLAG_ARM = 2
+    FINISH = 1: Arm movement finished, publish the next location -- FLAG_ARM = 1
+    FLAG_ARM = 0: Waiting status
+    """
+    global flag_arm
+    if finish.data == '1':
+        flag_arm = 1
+    elif finish.data == '0':
+        flag_arm = 2
+    # print("flag_arm")
+    # print(flag_arm)
+    # print("finish data")
+    # print(finish.data)
+
+
 def image_raw_callback(image):
     from cv_bridge import CvBridge, CvBridgeError
     bridge = CvBridge()
@@ -66,6 +86,7 @@ def image_raw_callback(image):
 
 def coords_for_object(cv_image):
     global cubeposclass
+    global flag_arm
     location_publisher = rospy.Publisher('/location', Location, queue_size=1)
     loc = Location()
     xlist = []
@@ -126,24 +147,28 @@ def coords_for_object(cv_image):
     # loc.y.append(max_x/640.0*1.2-0.6)
     # loc.x.append(0.8-max_y/400.0*0.6)
 
-    loc.x.append(max_x)
-    loc.y.append(max_y)
-    loc.theta.append(max_angle)
-    print('uv')
-    print(loc)
-    uVectorList = cubeposclass.compute_uVector(loc)
-    print('unit Vector')
-    print(uVectorList)
-    cVectorList = cubeposclass.compute_cVector(uVectorList)
-    world_pos = cubeposclass.compute_wPose(cVectorList)
-    loc.x[0] = world_pos[0].pose.position.x-0.245
-    loc.y[0] = world_pos[0].pose.position.y-0.286
-    print(loc)
-    location_publisher.publish(loc)
+    if (numpy.abs(prev_x - max_x) > 15) & (numpy.abs(prev_y - max_y) > 15) & (flag_arm == 1):
+        prev_x = max_x
+        prev_y = max_y
+        # loc.y.append(max_x / 640.0 * 1.2 - 0.6)
+        # loc.x.append(0.8 - max_y / 400.0 * 0.6)
+        loc.y.append(max_x )
+        loc.x.append(max_y )
+        loc.theta.append(max_angle)
+        location_publisher.publish(loc)
+        flag_arm = 0
+
+    if flag_arm == 2:
+        loc.y.append(prev_x )
+        loc.x.append(prev_y )
+        loc.theta.append(max_angle)
+        location_publisher.publish(loc)
+        flag_arm = 0
 
     # show images
     cv2.imshow("cv_images", numpy.hstack([cv_image, output]))
     cv2.setMouseCallback("cv_images",onMouse,0)
+    #cv2.waitKey(3)
     return
 
 def filter(x, y):
@@ -184,9 +209,10 @@ def listener():
     # rospy.Subscriber('/usb_cam/image_raw', Image, image_raw_callback)
     # rospy.Subscriber('/usb_cam/image_rect_color', Image, image_raw_callback)
     global  cubeposclass
-    cubeposclass = CubePositionClass()
+    #cubeposclass = CubePositionClass()
     rospy.Subscriber('/cameras/right_hand_camera/camera_info', CameraInfo, camera_info_callback)
     rospy.Subscriber('/cameras/right_hand_camera/image', Image, image_raw_callback)
+    rospy.Subscriber('/pick_finish', String, arm_finish_callback)
 
 def main():
     global clickX

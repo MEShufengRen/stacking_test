@@ -35,13 +35,15 @@ class MoveItPyPlanner_left(object):
     pose_target.position.z = z
     self.group.set_pose_target(pose_target)
     plan = self.group.plan()
+    if(plan == None):
+      return False
     self.group.go(wait=True)
     rospy.sleep(2)
     self.left_gripper.close()
     rospy.sleep(2)
     self.group.stop()
     self.group.clear_pose_targets()
-    return
+    return True
 
   def place_block(self, goal_x, goal_y, goal_z):
     print("============ Generating block placement plan")
@@ -52,13 +54,15 @@ class MoveItPyPlanner_left(object):
     pose_target.position.z = goal_z
     self.group.set_pose_target(pose_target)
     plan = self.group.plan()
+    if(plan == None):
+      return False
     self.group.go(wait=True)
     rospy.sleep(2)
     self.left_gripper.open()
     rospy.sleep(2)
     self.group.stop()
     self.group.clear_pose_targets()
-    return
+    return True
 
   def move_robotArm(self, x, y, z):
     print("============ Generating waypoint plan")
@@ -70,12 +74,14 @@ class MoveItPyPlanner_left(object):
     pose_target.position.z = z
     self.group.set_pose_target(pose_target)
     plan = self.group.plan()
+    if(plan == None):
+      return False
     self.group.go(wait=True)
     rospy.sleep(2)
     self.group.stop()
     self.group.clear_pose_targets()
 
-    return
+    return True
 
   def wait_for_state_update(self, box_is_known=False, box_is_attached=False, timeout=4):
     box_name = self.box_name

@@ -90,3 +90,34 @@ class CubePositionClass(object):
         if (not self.PMINIT):
             self.pm.fromCameraInfo(data)
             self.PMINIT = True
+
+def ImageLoc_callback(loc):
+    global cubeposclass
+    global worldLocation_publisher
+    print(loc)
+    wLoc = Location()
+    uVectorList = cubeposclass.compute_uVector(loc)
+    #print('unit Vector')
+    #print(uVectorList)
+    cVectorList = cubeposclass.compute_cVector(uVectorList)
+    world_pos = cubeposclass.compute_wPose(cVectorList)
+    print(world_pos)
+    wLoc.x.append(world_pos[0].pose.position.x-0.245)
+    wLoc.y.append( world_pos[0].pose.position.y-0.286)
+    print(wLoc)
+    worldLocation_publisher.publish(wLoc)
+    pass
+
+
+def main():
+    global  cubeposclass
+    global worldLocation_publisher
+    rospy.init_node('CubePosition_Node', anonymous=True)
+    cubeposclass = CubePositionClass()
+    worldLocation_publisher = rospy.Publisher('/world_location', Location, queue_size=1)
+    rospy.Subscriber('/location', Location, ImageLoc_callback)
+    rospy.spin()
+
+
+if __name__ == '__main__':
+    main()
