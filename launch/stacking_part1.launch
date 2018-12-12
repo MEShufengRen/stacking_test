@@ -1,0 +1,14 @@
+<launch>
+
+  <include file="$(find stacking_test)/launch/demo_baxter.launch"/>
+
+  <node name="IKServer" pkg="stacking_test" type="IKServer.py"/>
+
+  <node name="image_process" pkg="stacking_test" type="image_process.py"/>
+
+  <node name="RM_Qua" pkg="stacking_test" type="RM_Qua.py"/>
+
+  <node name="position_sub_client" pkg="stacking_test" type="position_sub_client.py"/>
+
+
+</launch>

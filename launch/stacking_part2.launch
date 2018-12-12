@@ -1,0 +1,6 @@
+<launch>
+
+
+  <node name="Confirm_Pos" pkg="stacking_test" type="Confirm_Pos.py"/>
+
+</launch>

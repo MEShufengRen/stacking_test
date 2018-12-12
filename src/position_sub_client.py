@@ -6,28 +6,30 @@ from std_msgs.msg import String
 
 
 def callback(position):
-    global  finish_pub
-    FINISH = String()
-    FINISH.data = '1'
-    flag = 'F'
-    # print(position)
     position.x=list(position.x)
-    #print(position.x)
     position.y = list(position.y)
-    #print(position.y)
     rospy.wait_for_service('move_arm')
     move_arm = rospy.ServiceProxy('move_arm', IKService)
+    fail_position = Location()
+    num = 0.0
     for i in range(len(position.x)):
-        print(position.x[i])
-        print(position.y[i])
-        flag = move_arm(position.x[i], position.y[i])
+        res = move_arm(position.x[i], position.y[i], num)
+        print(res.flag)
+        if res.flag == 1.0:
+            num = num + 1.0
+            print(num)
+        else:
+            print(num)
+            fail_position.x.append(position.x[i])
+            fail_position.y.append(position.y[i])
 
-    if flag=='T':
-        FINISH.data = '1'
-
-    finish_pub.publish(FINISH)
-
-
+    for i in range(len(fail_position.x)):
+        res = move_arm(fail_position.x[i], fail_position.y[i], num)
+        if res.flag == 1.0:
+            num = num + 1.0
+    # if flag=='T':
+    #     FINISH.data = '1'
+    # finish_pub.publish(FINISH)
 
 def main():
     global  finish_pub
