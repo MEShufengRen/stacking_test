@@ -20,7 +20,7 @@ def GetTansform_Range():
             global rangez
             if(len(transRange)!=0):
                 rangez = transRange[2]
-                # print(rangez)
+                print(rangez)
                 return rangez
                 break
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
@@ -43,12 +43,12 @@ def GetTransform():
 def callback(data):
     # print(data)
     global table_flag
+    print(table_flag)
     if not table_flag:
         global Z_table
         global pub
         uL = data.x
         vL = data.y
-        # Z_table = -0.17
         ET = GetTransform()
         print("in caLL BACK")
         print(Z_table)
@@ -64,23 +64,22 @@ def callback(data):
             A = np.concatenate((-TotalMatrix[:, 0:2], np.matrix([[u, v, 1]]).T), 1)
             B = np.matrix(TotalMatrix[:, 2]) * Z_table + np.matrix(TotalMatrix[:, 3])
             result = np.dot(np.linalg.inv(A), B)
-            list_x.append(result[0]+0.025)
-            list_y.append(result[1])
+            list_x.append(result[0]+0.035)
+            list_y.append(result[1]-0.02)
         posL.x = list_x
         posL.y = list_y
         pub.publish(posL)
 
 def Range_callback(data):
-
     global table_flag
     global zdistance
     global Z_table
     zdistance = data.range
     if zdistance < 0.5 and table_flag:
         rangez = GetTansform_Range()
-        Z_table = rangez - zdistance
-        print("Z_table")
-        print(Z_table)
+        Z_table = rangez - zdistance + 0.0508
+        # print("Z_table")
+        # print(Z_table)
         table_flag = False
 
 

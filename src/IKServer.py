@@ -29,7 +29,12 @@ def move_arm(req):
     if zdistance < 0.1:
         flag = 1.0
     _myPlanner_left.place_block(0.4, 0.4, -0.19+req.i*0.0508)
-    _myPlanner_left.move_robotArm(0.4, 0.4, 0.1)
+    _myPlanner_left.move_robotArm(0.35, 0.37, 0.0+req.i*0.0508)
+    rospy.sleep(4)
+    print(zdistance)
+    if zdistance < 0.325:
+        print('judge2')
+        flag = 1.0
     # statusFlag = judgesuccess(0.4, 0.4, 0.0)
     _myPlanner_left.group.stop()
     _myPlanner_left.group.clear_pose_targets()
@@ -40,7 +45,6 @@ def move_arm(req):
 def callback(data):
     global zdistance
     zdistance = data.range
-
 
 # def judgesuccess(X,Y,Z):
 #     statusflag = 2
@@ -70,7 +74,7 @@ def main():
     _myPlanner_left.group.set_planning_time(5.0)
     # _myPlanner_left.group.set_joint_value_target([0.094, -0.873, -0.907, 1.456, 0.564, 1.303, 3.034])
     # _myPlanner_left.group.go()
-    _myPlanner_left.move_robotArm(0.5, 0.5, 0.1)
+    _myPlanner_left.move_robotArm(0.5, 0.5, 0.0)
     rospy.Service('move_arm', IKService, move_arm)
     rate.sleep()
     rospy.spin()

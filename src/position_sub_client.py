@@ -14,11 +14,14 @@ def callback(position):
     num = 0.0
     for i in range(len(position.x)):
         res = move_arm(position.x[i], position.y[i], num)
+        print('flag')
         print(res.flag)
         if res.flag == 1.0:
             num = num + 1.0
+            print('success')
             print(num)
         else:
+            print('fails')
             print(num)
             fail_position.x.append(position.x[i])
             fail_position.y.append(position.y[i])

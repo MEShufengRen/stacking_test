@@ -45,7 +45,7 @@ def main():
     currentx = _myPlanner_left.group.get_current_pose().pose.position.x
     currenty = _myPlanner_left.group.get_current_pose().pose.position.y
     print(currentz)
-    _myPlanner_left.place_block(currentx, currenty, currentz+0.1)
+    _myPlanner_left.move_robotArm(0.4, 0.4, -0.22)
     moveit_commander.roscpp_shutdown()
   except(rospy.ROSInterruptException):
     ## When finished shut down moveit_commander.
