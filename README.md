@@ -43,9 +43,9 @@ During the movement, the sensor in the left hand was used to detect whether the 
 * [`image_process.py`](src/image_process.py)
 
 * Subscribed Topic:  
-* `/cameras/right_hand_camera/camera_info`  
-* `/cameras/right_hand_camera/image`  
-* `/Confirm_pos`  
+  `/cameras/right_hand_camera/camera_info`  
+  `/cameras/right_hand_camera/image`  
+  `/Confirm_pos`  
 
 * Published Topic: `/location`
 
@@ -53,11 +53,10 @@ During the movement, the sensor in the left hand was used to detect whether the 
 #### Camera Calibration Node
 * [`RM_Qua.py`](src/RM_Qua.py)
 
-* Subscribed Topic:  
-* `/location`  
-* `/robot/range/left_hand_range/state`
+* Subscribed Topic: `/location`  
+                    `/robot/range/left_hand_range/state`
 
-* ublished Topic: `/world_location`
+Published Topic: `/world_location`
 
 
 #### Robot Control Node
@@ -67,13 +66,13 @@ During the movement, the sensor in the left hand was used to detect whether the 
 
 * Client: `move_arm`
 
-* [`IKServer.py`](src/IKServer.py)
+         [`IKServer.py`](src/IKServer.py)
 
 * Subscribed Topics: `/robot/range/left_hand_range/state`
 
 * Server: `move_arm`  
 
-* [`left_moveit.py`](src/left_moveit.py)
+         [`left_moveit.py`](src/left_moveit.py)
 
 
 #### Starting Task Node
