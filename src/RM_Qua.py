@@ -64,8 +64,8 @@ def callback(data):
             A = np.concatenate((-TotalMatrix[:, 0:2], np.matrix([[u, v, 1]]).T), 1)
             B = np.matrix(TotalMatrix[:, 2]) * Z_table + np.matrix(TotalMatrix[:, 3])
             result = np.dot(np.linalg.inv(A), B)
-            list_x.append(result[0]+0.035)
-            list_y.append(result[1]-0.02)
+            list_x.append(result[0]+0.02)
+            list_y.append(result[1]+0.018)
         posL.x = list_x
         posL.y = list_y
         pub.publish(posL)

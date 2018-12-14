@@ -32,7 +32,7 @@ def move_arm(req):
     _myPlanner_left.move_robotArm(0.35, 0.37, 0.0+req.i*0.0508)
     rospy.sleep(4)
     print(zdistance)
-    if zdistance < 0.325:
+    if zdistance < 0.29:
         print('judge2')
         flag = 1.0
     # statusFlag = judgesuccess(0.4, 0.4, 0.0)
