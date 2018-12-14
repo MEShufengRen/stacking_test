@@ -74,11 +74,11 @@ Following is the workflow of our project.
 
 * Server: `move_arm`  
 
-* [`left_moveit.py`](src/left_moveit.py)
+* [`left_moveIt.py`](src/left_moveIt.py)
 
 
 #### Starting Task Node
-* [`Confirm_Pos.py`](src/Confirm_Pos)
+* [`Confirm_Pos.py`](src/Confirm_Pos.py)
 
 * Published Topic: `/Confirm_pos`
 
