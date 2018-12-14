@@ -28,10 +28,12 @@ Baxter was programmed to begin at the same initial position each time. Then when
 
 For the robot arm control, Cartesian Path Planner Plug-In in MoveIt was used to generate waypoints between beginning position and goal position. So that the robot arm won't move in unusual way and avoid hitting obstacles. And then, MoveIT planner was used to generate plan to make the arm move to the goal position along the waypoints.
 
-During the movement, the sensor in the left hand was used to detect whether the block was attached to the baxter's left hand successfully or not. If the distance from left hand was less than 0.1m, the baxter will assume that the block was not picked successfully. Then in the next placement, the height of the block being placed will not increase and also the baxter would came to the pick block again, which were not being picked successfully at last time.
+During the movement, the ranger in the left hand was used to detect whether the block was attached to the baxter's left hand successfully or not. If the distance from left hand was less than 0.1m, the baxter will assume that the block was not picked successfully. Then in the next placement, the height of the block being placed will not increase and also the baxter would came to the pick block again, which were not being picked successfully at last time.
 
 
 ## Implementation
+Following is the workflow of our project.
+![workflow](/image/workflow.jpg)
 ### Launch
 * [`demo_baxter.launch`](launch/demo_baxter.launch)  
 * [`move_group.launch`](launch/move_group.launch)  
@@ -50,7 +52,7 @@ During the movement, the sensor in the left hand was used to detect whether the 
 * Published Topic: `/location`
 
 
-#### Camera Calibration Node
+#### Corrdinate Translation Node
 * [`RM_Qua.py`](src/RM_Qua.py)
 
 * Subscribed Topic: `/location`  
@@ -79,6 +81,20 @@ During the movement, the sensor in the left hand was used to detect whether the 
 * [`Confirm_Pos.py`](src/Confirm_Pos)
 
 * Published Topic: `/Confirm_pos`
+
+### message
+* [`Location.msg`](msg/Location.msg)
+>float32[] x  
+float32[] y  
+float32[] theta  
+
+### srv
+* [`IKService.srv`](srv/IKService.srv)  
+>float32 x  
+float32 y  
+float32 i  
+\---  
+>float32 flag  
 
 ## Work Process
 1. Nodes Starting(Debugging Mode)
