@@ -33,53 +33,53 @@ During the movement, the sensor in the left hand was used to detect whether the 
 
 ## Implementation
 ### Launch
-[`demo_baxter.launch`](launch/demo_baxter.launch)  
-[`move_group.launch`](launch/move_group.launch)  
-[`stacking_part1.launch`](launch/stacking_part1.launch)  
-[`stacking_part2.launch`](launch/stacking_part2.launch)  
+* [`demo_baxter.launch`](launch/demo_baxter.launch)  
+* [`move_group.launch`](launch/move_group.launch)  
+* [`stacking_part1.launch`](launch/stacking_part1.launch)  
+* [`stacking_part2.launch`](launch/stacking_part2.launch)  
 
 ### Nodes
 #### Computer Vision Node
-[`image_process.py`](src/image_process.py)
+* [`image_process.py`](src/image_process.py)
 
-Subscribed Topic:  
-`/cameras/right_hand_camera/camera_info`  
-`/cameras/right_hand_camera/image`  
-`/Confirm_pos`  
+* Subscribed Topic:  
+* `/cameras/right_hand_camera/camera_info`  
+* `/cameras/right_hand_camera/image`  
+* `/Confirm_pos`  
 
-Published Topic: `/location`
+* Published Topic: `/location`
 
 
 #### Camera Calibration Node
-[`RM_Qua.py`](src/RM_Qua.py)
+* [`RM_Qua.py`](src/RM_Qua.py)
 
-Subscribed Topic:  
-`/location`  
-`/robot/range/left_hand_range/state`
+* Subscribed Topic:  
+* `/location`  
+* `/robot/range/left_hand_range/state`
 
-Published Topic: `/world_location`
+* ublished Topic: `/world_location`
 
 
 #### Robot Control Node
-[`position_sub_client.py`](src/position_sub_client.py)
+* [`position_sub_client.py`](src/position_sub_client.py)
 
-Subscribed Topics: `/world_location`
+* Subscribed Topics: `/world_location`
 
-Client: `move_arm`
+* Client: `move_arm`
 
-[`IKServer.py`](src/IKServer.py)
+* [`IKServer.py`](src/IKServer.py)
 
-Subscribed Topics: `/robot/range/left_hand_range/state`
+* Subscribed Topics: `/robot/range/left_hand_range/state`
 
-Server: `move_arm`  
+* Server: `move_arm`  
 
-[`left_moveit.py`](src/left_moveit.py)
+* [`left_moveit.py`](src/left_moveit.py)
 
 
 #### Starting Task Node
-[`Confirm_Pos.py`](src/Confirm_Pos)
+* [`Confirm_Pos.py`](src/Confirm_Pos)
 
-Published Topic: `/Confirm_pos`
+* Published Topic: `/Confirm_pos`
 
 ## Work Process
 1. Nodes Starting(Debugging Mode)
