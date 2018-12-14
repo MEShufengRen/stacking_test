@@ -56,7 +56,7 @@ During the movement, the sensor in the left hand was used to detect whether the 
 * Subscribed Topic: `/location`  
                     `/robot/range/left_hand_range/state`
 
-Published Topic: `/world_location`
+* Published Topic: `/world_location`
 
 
 #### Robot Control Node
@@ -66,13 +66,13 @@ Published Topic: `/world_location`
 
 * Client: `move_arm`
 
-         [`IKServer.py`](src/IKServer.py)
+* [`IKServer.py`](src/IKServer.py)
 
 * Subscribed Topics: `/robot/range/left_hand_range/state`
 
 * Server: `move_arm`  
 
-         [`left_moveit.py`](src/left_moveit.py)
+* [`left_moveit.py`](src/left_moveit.py)
 
 
 #### Starting Task Node
